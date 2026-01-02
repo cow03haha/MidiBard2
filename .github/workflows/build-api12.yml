@@ -1,0 +1,37 @@
+name: Build MidiBard2 API12
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Which branch to build'
+        required: true
+        default: 'v3-api12-stable'
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout selected branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch }}
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 7.0.x
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build MidiBard2.sln -c Release
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: MidiBard2-API12
+          path: |
+            **/bin/Release/**
