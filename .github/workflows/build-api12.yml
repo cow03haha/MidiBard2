@@ -25,6 +25,12 @@ jobs:
 
       - name: Restore
         run: dotnet restore
+      
+      - name: Fake Dalamud install (CI workaround)
+        shell: pwsh
+        run: |
+          $path = "$env:APPDATA\XIVLauncher\addon\Hooks\dev"
+          New-Item -ItemType Directory -Force -Path $path
 
       - name: Build (Release)
         run: dotnet build MidiBard2.sln -c Release --no-restore
